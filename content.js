@@ -5,12 +5,12 @@ function saveWord(selectedWord) {
     });
 }
 
-// Listen for mouseup event to detect right-clicks
-document.addEventListener('mouseup', function (event) {
-    if (event.button === 2) { // Right mouse button clicked
-        const selectedWord = window.getSelection().toString().trim();
-        if (selectedWord) {
-            saveWord(selectedWord);
-        }
-    }
-});
+// // Listen for mouseup event to detect right-clicks
+// document.addEventListener('mouseup', function (event) {
+//     if (event.button === 2) { // Right mouse button clicked
+//         const selectedWord = window.getSelection().toString().trim();
+//         if (selectedWord) {
+//             saveWord(selectedWord);
+//         }
+//     }
+// });
