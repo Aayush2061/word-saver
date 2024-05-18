@@ -3,8 +3,7 @@ body {
   background-color: #f4f4f4;
   margin: 0;
   padding: 20px;
-  width: 400px;
-  height: 400px;
+  width: 300px;
 }
 
 h1 {
@@ -27,6 +26,12 @@ ul#wordList li {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+ul#wordList li.date-header {
+  background: #e0e0e0;
+  font-weight: bold;
+  text-align: left;
 }
 
 ul#wordList li .word-text {
