@@ -1,10 +1,12 @@
-// Function to save the selected word
+// Function to save the selected word with timestamp
 function saveWord(selectedWord) {
     chrome.storage.sync.get('words', function (data) {
         var words = data.words || [];
-        words.push(selectedWord);
+        var timestamp = new Date().toLocaleString(); // Get current date and time
+        words.push({ word: selectedWord, timestamp: timestamp }); // Store word with timestamp
         chrome.storage.sync.set({ words: words }, function () {
-            console.log('Word saved successfully: ' + selectedWord);
+            console.log('Word saved successfully: ' + selectedWord + ' at ' + timestamp);
+            console.log('Current words in storage:', words);
         });
     });
 }

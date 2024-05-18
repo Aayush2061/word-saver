@@ -1,16 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="popup.css">
-    <title>Word Saver</title>
-    <script src="popup.js"></script>
+    <title>Saved Words</title>
+    <style>
+        body {
+            width: 500px;
+            height: 500px;
+            font-family: Arial, sans-serif;
+        }
+        #wordList {
+            list-style-type: none;
+            padding: 0;
+        }
+        #wordList li {
+            margin: 5px 0;
+        }
+        #wordList button {
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
     <h1>Saved Words</h1>
-  <ul id="wordList">
-    <!-- Saved words will be listed here dynamically -->
-  </ul>
+    <ul id="wordList"></ul>
+    <script src="popup.js"></script>
 </body>
 </html>
