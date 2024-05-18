@@ -67,6 +67,48 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Function to generate and download PDF of saved words
+    function downloadPDF() {
+        var { jsPDF } = window.jspdf;
+
+        var doc = new jsPDF();
+
+        // Get saved words from storage
+        chrome.storage.sync.get('words', function (data) {
+            var words = data.words || [];
+
+            if (words.length === 0) {
+                doc.text('No words saved.', 10, 10);
+            } else {
+                // Group words by date
+                var groupedWords = words.reduce((acc, entry) => {
+                    var date = new Date(entry.timestamp).toLocaleDateString();
+                    if (!acc[date]) acc[date] = [];
+                    acc[date].push(entry.word);
+                    return acc;
+                }, {});
+
+                var y = 10;
+                // Add words to PDF
+                for (var date in groupedWords) {
+                    doc.text(`${date} (${groupedWords[date].length} words)`, 10, y);
+                    y += 10;
+                    groupedWords[date].forEach(function (word) {
+                        doc.text(word, 10, y);
+                        y += 10;
+                    });
+                    y += 10;
+                }
+            }
+
+            // Save PDF
+            doc.save('saved_words.pdf');
+        });
+    }
+
+    // Add event listener to trigger PDF download
+    document.getElementById('downloadPDFButton').addEventListener('click', downloadPDF);
+
     // Display saved words when the popup is opened
     displaySavedWords();
 });

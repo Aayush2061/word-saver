@@ -1,59 +1,86 @@
+/* General styles for the popup */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  padding: 10px;
+  background-color: #f0f0f0;
   margin: 0;
-  padding: 20px;
   width: 300px;
 }
 
 h1 {
-  font-size: 18px;
+  font-size: 24px;
   color: #333;
   text-align: center;
+  margin-bottom: 20px;
 }
 
 ul#wordList {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
 }
 
-ul#wordList li {
-  background: #fff;
-  margin: 10px 0;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+li {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: #fff;
+  margin-bottom: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-ul#wordList li.date-header {
-  background: #e0e0e0;
+li.date-header {
   font-weight: bold;
-  text-align: left;
+  background-color: #ececec;
 }
 
-ul#wordList li .word-text {
-  flex: 1;
-  margin-right: 10px;
+span.word-text {
+  font-size: 16px;
+  color: #333;
 }
 
-ul#wordList li button {
-  background: #ff4d4d;
-  color: #fff;
+button {
+  background-color: #ff6666;
   border: none;
+  color: white;
   padding: 5px 10px;
-  border-radius: 3px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
   cursor: pointer;
+  border-radius: 5px;
 }
 
-ul#wordList li button:hover {
-  background: #ff1a1a;
+button:hover {
+  background-color: #ff4d4d;
 }
 
 .no-words {
   text-align: center;
-  color: #999;
-  font-size: 14px;
+  font-style: italic;
+  color: #666;
+}
+
+#downloadPDFButton {
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+#downloadPDFButton:hover {
+  background-color: #45a049;
+}
+
+/* Increase margin bottom of the last word in the list */
+ul#wordList li:last-child {
+  margin-bottom: 20px;
 }
