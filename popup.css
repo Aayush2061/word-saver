@@ -1,4 +1,54 @@
 body {
-  width: 1000px;
-  height: 1000px;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 20px;
+  width: 400px;
+  height: 400px;
+}
+
+h1 {
+  font-size: 18px;
+  color: #333;
+  text-align: center;
+}
+
+ul#wordList {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul#wordList li {
+  background: #fff;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+ul#wordList li .word-text {
+  flex: 1;
+  margin-right: 10px;
+}
+
+ul#wordList li button {
+  background: #ff4d4d;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+ul#wordList li button:hover {
+  background: #ff1a1a;
+}
+
+.no-words {
+  text-align: center;
+  color: #999;
+  font-size: 14px;
 }
