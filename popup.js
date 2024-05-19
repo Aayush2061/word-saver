@@ -1,10 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Function to retrieve and display saved words grouped by date with word count
     function displaySavedWords() {
         chrome.storage.sync.get('words', function (data) {
             var words = data.words || [];
             var wordList = document.getElementById('wordList');
-            wordList.innerHTML = ''; // Clear previous list
+            wordList.innerHTML = '';
 
             if (words.length === 0) {
                 var li = document.createElement('li');
@@ -12,42 +11,66 @@ document.addEventListener('DOMContentLoaded', function () {
                 li.textContent = 'No words saved.';
                 wordList.appendChild(li);
             } else {
-                // Group words by date
                 var groupedWords = words.reduce((acc, entry) => {
                     var date = new Date(entry.timestamp).toLocaleDateString();
                     if (!acc[date]) acc[date] = [];
-                    acc[date].push(entry.word);
+                    acc[date].push(entry);
                     return acc;
                 }, {});
 
-                // Display grouped words with word count
+                var today = new Date().toLocaleDateString();
+
                 for (var date in groupedWords) {
                     var dateHeader = document.createElement('li');
                     dateHeader.textContent = `${date} (${groupedWords[date].length} words)`;
                     dateHeader.className = 'date-header';
+                    dateHeader.dataset.date = date;
+                    dateHeader.addEventListener('click', function () {
+                        toggleWordsVisibility(this.dataset.date);
+                    });
                     wordList.appendChild(dateHeader);
 
-                    groupedWords[date].forEach(function (word) {
+                    var wordItemsContainer = document.createElement('ul');
+                    wordItemsContainer.className = `word-items`;
+                    wordItemsContainer.dataset.date = date;
+                    wordItemsContainer.style.display = date === today ? 'block' : 'none';
+                    groupedWords[date].forEach(function (entry) {
                         var li = document.createElement('li');
+                        li.className = 'word-item';
                         var wordText = document.createElement('span');
                         wordText.className = 'word-text';
-                        wordText.textContent = word;
-                        // Add a delete button for each word
+                        wordText.textContent = entry.word;
+
+                        var buttonsContainer = document.createElement('div');
+                        buttonsContainer.className = 'buttons-container';
+
+                        var pronounceBtn = document.createElement('button');
+                        pronounceBtn.textContent = '🔊';
+                        pronounceBtn.className = 'pronounce-btn';
+                        pronounceBtn.addEventListener('click', function () {
+                            pronounceWord(entry.word);
+                        });
+
                         var deleteBtn = document.createElement('button');
                         deleteBtn.textContent = 'Delete';
                         deleteBtn.addEventListener('click', function () {
-                            deleteWord(word);
+                            deleteWord(entry.word);
                         });
+
+                        buttonsContainer.appendChild(pronounceBtn);
+                        buttonsContainer.appendChild(deleteBtn);
+
                         li.appendChild(wordText);
-                        li.appendChild(deleteBtn);
-                        wordList.appendChild(li);
+                        li.appendChild(buttonsContainer);
+                        wordItemsContainer.appendChild(li);
                     });
+
+                    wordList.appendChild(wordItemsContainer);
                 }
             }
         });
     }
 
-    // Function to delete a word
     function deleteWord(wordToDelete) {
         chrome.storage.sync.get('words', function (data) {
             var words = data.words || [];
@@ -59,28 +82,22 @@ document.addEventListener('DOMContentLoaded', function () {
                         console.error('Error deleting word:', chrome.runtime.lastError);
                     } else {
                         console.log('Word deleted successfully: ' + wordToDelete);
-                        // Update UI after deletion
                         displaySavedWords();
+                        updateHighlights();
                     }
                 });
             }
         });
     }
 
-    // Function to generate and download PDF of saved words
     function downloadPDF() {
         var { jsPDF } = window.jspdf;
-
         var doc = new jsPDF();
-
-        // Get saved words from storage
         chrome.storage.sync.get('words', function (data) {
             var words = data.words || [];
-
             if (words.length === 0) {
                 doc.text('No words saved.', 10, 10);
             } else {
-                // Group words by date
                 var groupedWords = words.reduce((acc, entry) => {
                     var date = new Date(entry.timestamp).toLocaleDateString();
                     if (!acc[date]) acc[date] = [];
@@ -89,7 +106,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }, {});
 
                 var y = 10;
-                // Add words to PDF
                 for (var date in groupedWords) {
                     doc.text(`${date} (${groupedWords[date].length} words)`, 10, y);
                     y += 10;
@@ -100,15 +116,28 @@ document.addEventListener('DOMContentLoaded', function () {
                     y += 10;
                 }
             }
-
-            // Save PDF
             doc.save('saved_words.pdf');
         });
     }
 
-    // Add event listener to trigger PDF download
-    document.getElementById('downloadPDFButton').addEventListener('click', downloadPDF);
+    function updateHighlights() {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, { action: 'updateHighlights' });
+        });
+    }
 
-    // Display saved words when the popup is opened
+    function pronounceWord(word) {
+        var utterance = new SpeechSynthesisUtterance(word);
+        speechSynthesis.speak(utterance);
+    }
+
+    function toggleWordsVisibility(date) {
+        var wordItemsContainer = document.querySelector(`.word-items[data-date="${date}"]`);
+        if (wordItemsContainer) {
+            wordItemsContainer.style.display = wordItemsContainer.style.display === 'none' ? 'block' : 'none';
+        }
+    }
+
+    document.getElementById('downloadPDFButton').addEventListener('click', downloadPDF);
     displaySavedWords();
 });

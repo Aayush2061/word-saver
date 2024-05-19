@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saved Words</title>
     <link rel="stylesheet" href="popup.css">
 </head>
 <body>
     <h1>Saved Words</h1>
+    <ul id="wordList"></ul>
     <button id="downloadPDFButton">Download PDF</button>
-    <ul id="wordList">
-        <!-- Words will be injected here by popup.js -->
-    </ul>
     <script src="libs/jspdf.umd.min.js"></script>
-    <script src="popup.js"></script>
+    <script src="popup.js" defer></script>
 </body>
 </html>
