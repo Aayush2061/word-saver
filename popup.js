@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 var groupedWords = words.reduce((acc, entry) => {
                     var date = new Date(entry.timestamp).toLocaleDateString();
                     if (!acc[date]) acc[date] = [];
-                    acc[date].push(entry);
+                    acc[date].push(entry); // Push entire entry, not just the word
                     return acc;
                 }, {});
 
@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
 
     function deleteWord(wordToDelete) {
         chrome.storage.sync.get('words', function (data) {
@@ -138,6 +139,20 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function saveWordFromInput(event) {
+        event.preventDefault();
+        var wordInput = document.getElementById('wordInput');
+        var selectedWord = wordInput.value.trim();
+        if (selectedWord) {
+            chrome.runtime.sendMessage({ action: 'saveWord', word: selectedWord }, function (response) {
+                console.log(response.message);
+                wordInput.value = '';
+                displaySavedWords(); // Refresh the display immediately after saving
+                updateHighlights();
+            });
+        }
+    }
+    document.getElementById('wordForm').addEventListener('submit', saveWordFromInput);
     document.getElementById('downloadPDFButton').addEventListener('click', downloadPDF);
     displaySavedWords();
 });

@@ -8,9 +8,14 @@
 </head>
 <body>
     <h1>Saved Words</h1>
+    <form id="wordForm">
+        <input type="text" id="wordInput" placeholder="Enter a word or sentence" required>
+        <button type="submit">Save</button>
+    </form>
     <ul id="wordList"></ul>
     <button id="downloadPDFButton">Download PDF</button>
     <script src="libs/jspdf.umd.min.js"></script>
     <script src="popup.js" defer></script>
 </body>
 </html>
+
